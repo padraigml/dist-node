@@ -94,6 +94,7 @@ func Listen(pAddr *string, node *Node) {
 
 func main() {
 	pAddr := flag.String("port", ":8001", "Port to listen on.")
+	ipAddr := flag.String("ip", "127.0.0.1", "IP address.")
 	flag.Parse()
 	//port = *pAddr
 
@@ -101,14 +102,14 @@ func main() {
 
 	go Listen(pAddr, &Node{Close: false})
 
-	brokerAddr := "127.0.0.1:8000"
+	brokerAddr := "192.168.0.13:8000"
 	client, err := rpc.Dial("tcp", brokerAddr)
 	if err != nil {
 		log.Fatal("dialing: ", err)
 	}
 	defer client.Close()
 
-	request := stubs.Subscription{NodeAddress: "127.0.0.1" + *pAddr, Callback: "Node.ProcessTurn"}
+	request := stubs.Subscription{NodeAddress: *ipAddr + *pAddr, Callback: "Node.ProcessTurn"}
 	response := new(stubs.NodeResponse)
 	err2 := client.Call(stubs.RegisterNode, request, response)
 	if err2 != nil {
