@@ -40,12 +40,6 @@ type SaveWorldInfo struct {
 	Turn  int
 }
 
-type gameState struct {
-	Info         Info
-	CurrentWorld [][]byte
-	CurrentTurn  int
-}
-
 type Params struct {
 	Turns       int
 	Threads     int

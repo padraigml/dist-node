@@ -14,7 +14,7 @@ type Node struct {
 }
 
 var (
-	port     string
+	//port     string
 	KillNode = make(chan struct{})
 )
 
