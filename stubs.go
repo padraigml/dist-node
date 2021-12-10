@@ -3,17 +3,17 @@ package main
 var RegisterNode = "Broker.RegisterNode"
 
 type BrokerRequest struct {
-	Info structs.Info
+	Info Info
 	Key  int
 }
 
 type NResponse struct {
-	Inf      structs.NodeInfo
+	Inf      NodeInfo
 	NumAlive int
 }
 
 type SaveResponse struct {
-	Info structs.SaveWorldInfo
+	Info SaveWorldInfo
 }
 
 type PauseResponse struct {
@@ -22,11 +22,11 @@ type PauseResponse struct {
 }
 
 type PublishRequest struct {
-	Job structs.Job
+	Job Job
 }
 
 type NodeResponse struct {
-	Info     structs.Info
+	Info     Info
 	Turn     int
 	NumAlive int
 	Ready    bool
