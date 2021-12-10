@@ -7,6 +7,8 @@ import (
 	"net"
 	"net/rpc"
 	"time"
+
+	"uk.ac.bris.cs/gameoflife/stubs"
 )
 
 type Node struct {
@@ -18,7 +20,7 @@ var (
 	KillNode = make(chan struct{})
 )
 
-func CalculateNextState(job Job) [][]byte {
+func CalculateNextState(job stubs.Job) [][]byte {
 	imgHeight := job.P.ImageHeight
 	imgWidth := job.P.ImageWidth
 	world := job.World
@@ -56,20 +58,20 @@ func CalculateNextState(job Job) [][]byte {
 	return nw[job.StartY:job.EndY]
 }
 
-func (n *Node) ProcessTurn(req PublishRequest, res *NResponse) (err error) {
+func (n *Node) ProcessTurn(req stubs.PublishRequest, res *stubs.NResponse) (err error) {
 	alive := calculateNumAlive(req.Job.World, req.Job.P)
 	res.Inf.World = CalculateNextState(req.Job)
 	res.NumAlive = alive
 	return
 }
 
-func (n *Node) StopNode(req BrokerRequest, res *NodeResponse) (err error) {
+func (n *Node) StopNode(req stubs.BrokerRequest, res *stubs.NodeResponse) (err error) {
 	n.Close = true
 	close(KillNode)
 	return
 }
 
-func calculateNumAlive(world [][]byte, p Params) int {
+func calculateNumAlive(world [][]byte, p stubs.Params) int {
 	count := 0
 
 	for y := 0; y < p.ImageHeight; y++ {
@@ -106,9 +108,9 @@ func main() {
 	}
 	defer client.Close()
 
-	request := Subscription{NodeAddress: "127.0.0.1" + *pAddr, Callback: "Node.ProcessTurn"}
-	response := new(NodeResponse)
-	err2 := client.Call(RegisterNode, request, response)
+	request := stubs.Subscription{NodeAddress: "127.0.0.1" + *pAddr, Callback: "Node.ProcessTurn"}
+	response := new(stubs.NodeResponse)
+	err2 := client.Call(stubs.RegisterNode, request, response)
 	if err2 != nil {
 		log.Fatal(err2)
 	}
