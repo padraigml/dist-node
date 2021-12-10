@@ -1,3 +1,3 @@
-module uk.ac.bris.cs/gameoflife
+module node
 
 go 1.15

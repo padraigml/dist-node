@@ -7,9 +7,8 @@ import (
 	"math/rand"
 	"net"
 	"net/rpc"
+	"node/stubs"
 	"time"
-
-	"uk.ac.bris.cs/gameoflife/stubs"
 )
 
 type Node struct {
@@ -105,6 +104,7 @@ func main() {
 
 	brokerAddr := "192.168.0.13:8000"
 	client, err := rpc.Dial("tcp", brokerAddr)
+	fmt.Println("here")
 	if err != nil {
 		log.Fatal("dialing: ", err)
 	}
