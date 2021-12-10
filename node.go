@@ -99,12 +99,12 @@ func main() {
 	//port = *pAddr
 
 	rand.Seed(time.Now().UnixNano())
-	fmt.Println("here")
 
 	go Listen(pAddr, &Node{Close: false})
 
 	brokerAddr := "192.168.0.13:8000"
 	client, err := rpc.Dial("tcp", brokerAddr)
+	fmt.Println("here")
 	if err != nil {
 		log.Fatal("dialing: ", err)
 	}
