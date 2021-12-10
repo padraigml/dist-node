@@ -3,7 +3,6 @@ package node
 import (
 	"flag"
 	"log"
-	"main/stubs"
 	"math/rand"
 	"net"
 	"net/rpc"
@@ -19,7 +18,7 @@ var (
 	KillNode = make(chan struct{})
 )
 
-func CalculateNextState(job structs.Job) [][]byte {
+func CalculateNextState(job Job) [][]byte {
 	imgHeight := job.P.ImageHeight
 	imgWidth := job.P.ImageWidth
 	world := job.World
@@ -57,20 +56,20 @@ func CalculateNextState(job structs.Job) [][]byte {
 	return nw[job.StartY:job.EndY]
 }
 
-func (n *Node) ProcessTurn(req stubs.PublishRequest, res *stubs.NResponse) (err error) {
+func (n *Node) ProcessTurn(req PublishRequest, res *NResponse) (err error) {
 	alive := calculateNumAlive(req.Job.World, req.Job.P)
 	res.Inf.World = CalculateNextState(req.Job)
 	res.NumAlive = alive
 	return
 }
 
-func (n *Node) StopNode(req stubs.BrokerRequest, res *stubs.NodeResponse) (err error) {
+func (n *Node) StopNode(req BrokerRequest, res *NodeResponse) (err error) {
 	n.Close = true
 	close(KillNode)
 	return
 }
 
-func calculateNumAlive(world [][]byte, p structs.Params) int {
+func calculateNumAlive(world [][]byte, p Params) int {
 	count := 0
 
 	for y := 0; y < p.ImageHeight; y++ {
@@ -107,9 +106,9 @@ func main() {
 	}
 	defer client.Close()
 
-	request := stubs.Subscription{NodeAddress: "127.0.0.1" + *pAddr, Callback: "Node.ProcessTurn"}
-	response := new(stubs.NodeResponse)
-	err2 := client.Call(stubs.RegisterNode, request, response)
+	request := Subscription{NodeAddress: "127.0.0.1" + *pAddr, Callback: "Node.ProcessTurn"}
+	response := new(NodeResponse)
+	err2 := client.Call(RegisterNode, request, response)
 	if err2 != nil {
 		log.Fatal(err2)
 	}
