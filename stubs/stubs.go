@@ -1,4 +1,4 @@
-package main
+package stubs
 
 var RegisterNode = "Broker.RegisterNode"
 
