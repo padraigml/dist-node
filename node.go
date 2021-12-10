@@ -102,7 +102,7 @@ func main() {
 
 	go Listen(pAddr, &Node{Close: false})
 
-	brokerAddr := "77.96.26.242:8001"
+	brokerAddr := "192.168.0.13:8001"
 	client, err := rpc.Dial("tcp", brokerAddr)
 	fmt.Println("here")
 	if err != nil {
