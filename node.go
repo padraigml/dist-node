@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"math/rand"
 	"net"
@@ -102,11 +103,12 @@ func main() {
 
 	go Listen(pAddr, &Node{Close: false})
 
-	brokerAddr := "127.0.0.1:8000"
+	brokerAddr := "192.168.0.13:8000"
 	client, err := rpc.Dial("tcp", brokerAddr)
 	if err != nil {
 		log.Fatal("dialing: ", err)
 	}
+	fmt.Println("connected to broker: ", client)
 	defer client.Close()
 
 	request := stubs.Subscription{NodeAddress: *ipAddr + *pAddr, Callback: "Node.ProcessTurn"}
